@@ -56,7 +56,10 @@ function App() {
   const handlDelete = async (id: string) => {
     try {
       const response = await axios.delete(`${baseUrl}/guests/${id}`);
-      if (response.statusText === "OK") fetchData();
+      if (response.statusText === "OK") {
+        console.log("ran in handle delete");
+        fetchData();
+      }
     } catch (error) {
       setError(error.message);
     }
@@ -79,6 +82,10 @@ function App() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log("data has changed");
+  }, [data]);
 
   useEffect(() => {
     debounceSearch();
