@@ -30,11 +30,6 @@ function App() {
     }
   };
 
-  // Pass fetchData function to Add component
-  const handleAdd = () => {
-    fetchData(); // Call fetchData from App component
-  };
-
   const check = async (id: string, payload: boolean) => {
     try {
       const response = await axios.patch(`${baseUrl}/guests/${id}`, {
@@ -56,6 +51,16 @@ function App() {
         [id]: !prevState[id],
       };
     });
+  };
+
+  const handlDelete = async (id: string) => {
+    try {
+      const response = await axios.delete(`${baseUrl}/guests/${id}`);
+      console.log({ response });
+      if (response.statusText === "OK") fetchData();
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleInput = (e) => {
@@ -100,7 +105,6 @@ function App() {
           />
         </div>
         {isLoading && <div>Loading...</div>}
-        {error && <div>Error: {error}</div>}
         {data?.map((info: ReturnedData) => {
           return (
             <div key={info?.id}>
@@ -110,6 +114,11 @@ function App() {
                 onChange={() => handleCheckboxChange(info?.id)}
               />
               {info?.name}
+              <input
+                type="button"
+                value="remove"
+                onClick={() => handlDelete(info.id)}
+              />
             </div>
           );
         })}
@@ -121,6 +130,7 @@ function App() {
       <div id="login">
         <Login />
       </div>
+      {error && <div>Error: {error}</div>}
     </div>
   );
 }
