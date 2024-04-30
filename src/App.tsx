@@ -5,7 +5,7 @@ import "./App.css";
 import axios from "axios";
 import { ReturnedData, baseUrl } from "./default";
 import Login from "./Login";
-import Add from "./add";
+import Add from "./Add";
 
 function App() {
   const [data, setData] = useState([]);
