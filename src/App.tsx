@@ -56,7 +56,8 @@ function App() {
   const handlDelete = async (id: string) => {
     try {
       const response = await axios.delete(`${baseUrl}/guests/${id}`);
-      if (response.statusText === "OK") {
+      console.log({ response });
+      if (response.status === 200) {
         console.log("ran in handle delete");
         fetchData();
       }
