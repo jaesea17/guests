@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { baseUrl } from "./default";
 
 export default function ({ setAttemptedLogin }) {
   const [password, setPassword] = useState("");
+  const [value, setValue] = useState("Login");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -12,6 +13,7 @@ export default function ({ setAttemptedLogin }) {
     e.preventDefault();
     setAttemptedLogin((prev: boolean) => !prev);
     setPassword("");
+    setValue("Logining...");
     try {
       const response = await axios.post(`${baseUrl}/auth/login`, {
         email: "",
@@ -19,8 +21,12 @@ export default function ({ setAttemptedLogin }) {
       });
       if (response.data) {
         localStorage.setItem("token", response.data);
+        setAttemptedLogin((prev) => !prev);
+        setValue("Login");
       }
-    } catch (error) {}
+    } catch (error) {
+      setValue("Login");
+    }
   };
 
   return (
@@ -34,7 +40,7 @@ export default function ({ setAttemptedLogin }) {
           placeholder="Enter password"
           required
         />
-        <button type="submit">login</button>
+        <input type="submit" value={value} />
       </form>
     </div>
   );

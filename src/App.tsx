@@ -8,6 +8,7 @@ import Login from "./Login";
 import Add from "./Add";
 
 function App() {
+  const [remove, setRemove] = useState("remove");
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -58,6 +59,7 @@ function App() {
   };
 
   const handlDelete = async (id: string) => {
+    setRemove("removing...");
     try {
       const response = await axios.delete(`${baseUrl}/guests/${id}`);
       if (response.status === 200) {
@@ -84,6 +86,7 @@ function App() {
   const verifyLogin = () => {
     const token = localStorage.getItem("token");
     if (token) setIsLoggedIn(true);
+    console.log({ isLoggedIn });
   };
   //useEffects
   useEffect(() => {
@@ -131,7 +134,7 @@ function App() {
               {isLoggedIn && (
                 <input
                   type="button"
-                  value="remove"
+                  value={remove}
                   onClick={() => handlDelete(info.id)}
                 />
               )}
