@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
-import { ReturnedData, baseUrl } from "./default";
+import { ReturnedData, baseUrl, returnedData } from "./default";
 import Login from "./Login";
 import Add from "./Add";
 
 function App() {
   const [remove, setRemove] = useState("remove");
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([returnedData]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isChecked, setIsChecked] = useState({});
@@ -36,26 +36,25 @@ function App() {
   };
 
   const check = async (id: string, payload: boolean) => {
+    const index = data.findIndex((obj: Record<string, any>) => obj.id === id);
+    console.log({ index });
     try {
       const response = await axios.patch(`${baseUrl}/guests/${id}`, {
         payload,
       });
-      if (response.status === 200) fetchData();
+      console.log({ response });
+      if (response.data.affected > 0) {
+        setData((prev) => {
+          prev[index].isChecked = payload;
+          return [...prev];
+        });
+      }
     } catch (error) {
       setMessage(error.message);
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleCheckboxChange = (id: string) => {
-    setIsChecked((prevState) => {
-      return {
-        ...prevState,
-        [id]: !prevState[id],
-      };
-    });
   };
 
   const handlDelete = async (id: string) => {
@@ -102,12 +101,6 @@ function App() {
     debounceSearch();
   }, [query]);
 
-  useEffect(() => {
-    const id = Object.keys(isChecked).at(-1) as string;
-    const value = Object.values(isChecked).at(-1) as boolean;
-    check(id, value);
-  }, [isChecked]);
-
   return (
     <div id="parent">
       <div id="display">
@@ -128,7 +121,7 @@ function App() {
               <input
                 type="checkbox"
                 checked={info?.isChecked}
-                onChange={() => handleCheckboxChange(info?.id)}
+                onChange={() => check(info?.id, !info?.isChecked)}
               />
               {info?.name}
               {isLoggedIn && (

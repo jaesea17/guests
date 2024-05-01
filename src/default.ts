@@ -9,3 +9,9 @@ export interface ReturnedData {
   name: string;
   isChecked: boolean;
 }
+
+export const returnedData = {
+  id: "",
+  name: "",
+  isChecked: false,
+};
