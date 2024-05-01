@@ -14,7 +14,10 @@ function App() {
   const [isChecked, setIsChecked] = useState({});
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(30);
+  const [message, setMessage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [attemptedLogin, setAttemptedLogin] = useState(false);
 
   //functions
   const fetchData = async (param = "") => {
@@ -24,6 +27,7 @@ function App() {
       );
       setData(response.data.guests);
     } catch (error) {
+      setMessage(error.message);
       setError(error.message);
     } finally {
       setIsLoading(false);
@@ -36,8 +40,8 @@ function App() {
         payload,
       });
       if (response.status === 200) fetchData();
-      console.log({ response });
     } catch (error) {
+      setMessage(error.message);
       setError(error.message);
     } finally {
       setIsLoading(false);
@@ -56,12 +60,11 @@ function App() {
   const handlDelete = async (id: string) => {
     try {
       const response = await axios.delete(`${baseUrl}/guests/${id}`);
-      console.log({ response });
       if (response.status === 200) {
-        console.log("ran in handle delete");
         fetchData();
       }
     } catch (error) {
+      setMessage(error.message);
       setError(error.message);
     }
   };
@@ -78,15 +81,19 @@ function App() {
     }, 1000);
     if (fired) clearTimeout(debounce);
   };
-
+  const verifyLogin = () => {
+    const token = localStorage.getItem("token");
+    if (token) setIsLoggedIn(true);
+  };
   //useEffects
   useEffect(() => {
     fetchData();
+    verifyLogin();
   }, []);
 
   useEffect(() => {
-    console.log("data has changed");
-  }, [data]);
+    verifyLogin();
+  }, [attemptedLogin]);
 
   useEffect(() => {
     debounceSearch();
@@ -121,23 +128,25 @@ function App() {
                 onChange={() => handleCheckboxChange(info?.id)}
               />
               {info?.name}
-              <input
-                type="button"
-                value="remove"
-                onClick={() => handlDelete(info.id)}
-              />
+              {isLoggedIn && (
+                <input
+                  type="button"
+                  value="remove"
+                  onClick={() => handlDelete(info.id)}
+                />
+              )}
             </div>
           );
         })}
       </div>
       <div id="addGuest">
         {/* Pass fetchData function as a prop to Add component */}
-        <Add fetchData={fetchData} />
+        {isLoggedIn && <Add fetchData={fetchData} setMessage={setMessage} />}
       </div>
       <div id="login">
-        <Login />
+        <Login setAttemptedLogin={setAttemptedLogin} />
       </div>
-      {error && <div>Error: {error}</div>}
+      {message && <div>{message}</div>}
     </div>
   );
 }
