@@ -8,6 +8,7 @@ export interface ReturnedData {
   id: string;
   name: string;
   isChecked: boolean;
+  val?: string;
 }
 
 export const returnedData = {

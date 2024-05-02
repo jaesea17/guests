@@ -8,7 +8,6 @@ import Login from "./Login";
 import Add from "./Add";
 
 function App() {
-  const [remove, setRemove] = useState("remove");
   const [data, setData] = useState([returnedData]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,16 +36,14 @@ function App() {
 
   const check = async (id: string, payload: boolean) => {
     const index = data.findIndex((obj: Record<string, any>) => obj.id === id);
-    console.log({ index });
     try {
       const response = await axios.patch(`${baseUrl}/guests/${id}`, {
         payload,
       });
-      console.log({ response });
       if (response.data.affected > 0) {
         setData((prev) => {
           prev[index].isChecked = payload;
-          return [...prev];
+          return prev;
         });
       }
     } catch (error) {
@@ -58,7 +55,6 @@ function App() {
   };
 
   const handlDelete = async (id: string) => {
-    setRemove("removing...");
     try {
       const response = await axios.delete(`${baseUrl}/guests/${id}`);
       if (response.status === 200) {
@@ -127,13 +123,23 @@ function App() {
               {isLoggedIn && (
                 <input
                   type="button"
-                  value={remove}
+                  value="remove"
                   onClick={() => handlDelete(info.id)}
                 />
               )}
             </div>
           );
         })}
+        <input
+          type="button"
+          value="back"
+          onClick={() => setPage((prev) => prev++)}
+        />
+        <input
+          type="button"
+          value="next"
+          onClick={() => setPage((prev) => prev--)}
+        />
       </div>
       <div id="addGuest">
         {/* Pass fetchData function as a prop to Add component */}
