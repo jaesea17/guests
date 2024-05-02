@@ -5,6 +5,23 @@
   /* text-align: left; */
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('./assets/aidagreg.jpeg');
+  /* background-color: rgb(141, 127, 111); */
+  /* Replace 'path/to/your/image.jpg' with the path to your image */
+  background-size: cover;
+  background-size: 100%;
+ 
+  background-position:unset;
+  
+  background-repeat: no-repeat;
+  min-width: 320px;
+    min-height: 100vh;
+  
+}
+
  #parent {
   display: flex;
   flex-direction: row;
