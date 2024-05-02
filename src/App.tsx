@@ -100,12 +100,12 @@ function App() {
   return (
     <div id="parent">
       <div id="display">
-        <div>
+        <div className="search-container">
           <input
             type="text"
-            id="search"
+            className="search-input"
             name="q"
-            placeholder="Enter your search term"
+            placeholder="Search"
             value={query}
             onChange={handleInput}
           />
@@ -146,7 +146,7 @@ function App() {
         {isLoggedIn && <Add fetchData={fetchData} setMessage={setMessage} />}
       </div>
       <div id="login">
-        <Login setAttemptedLogin={setAttemptedLogin} />
+        {!isLoggedIn && <Login setAttemptedLogin={setAttemptedLogin} />}
       </div>
       {message && <div>{message}</div>}
     </div>

@@ -33,6 +33,20 @@ body {
     justify-content: space-around; */
 }
 
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  font-size: 16px;
+}
+
+
+/* .search-input:hover {
+  background-color: #0056b3;
+} */
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
