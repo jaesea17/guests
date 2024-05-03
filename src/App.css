@@ -66,9 +66,8 @@ body {
   /* Apply styles for screens up to 768px wide (typically phones) */
   body {
      background-size: cover; /*Adjust background size for phone screens */
-    /* background-size: 100%; */
-    /* background-position: unset; */
-    color: rgb(177, 145, 123);
+    color: hwb(0 100% 0%);
+    background-attachment: fixed;
   }
 }
 
