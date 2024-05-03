@@ -17,7 +17,7 @@ body {
   background-position:unset;
   
   background-repeat: no-repeat;
-  min-width: 0px;
+  min-width: 320px;
     min-height: 100vh;
     background-attachment: scroll;
     
@@ -69,7 +69,9 @@ body {
   body {
      background-size: cover; /*Adjust background size for phone screens */
     color: hwb(0 100% 0%);
-    background-attachment:scroll;
+    background-attachment:fixed;
+    min-width: 320px;
+      min-height: 100vh;
   }
 }
 
