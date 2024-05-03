@@ -62,3 +62,12 @@ body {
   }
 }
 
+@media (max-width: 768px) {
+  /* Apply styles for screens up to 768px wide (typically phones) */
+  body {
+     background-size: cover; /*Adjust background size for phone screens */
+    /* background-size: 100%; */
+    /* background-position: unset; */
+  }
+}
+

@@ -97,6 +97,10 @@ function App() {
     debounceSearch();
   }, [query]);
 
+  if (isLoading) {
+    return <div>LOADING...</div>;
+  }
+
   return (
     <div id="parent">
       <div id="display">
@@ -110,7 +114,6 @@ function App() {
             onChange={handleInput}
           />
         </div>
-        {isLoading && <div>Loading...</div>}
         {data?.map((info: ReturnedData) => {
           return (
             <div key={info?.id}>
