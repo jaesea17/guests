@@ -25,7 +25,7 @@ function App() {
       const response = await axios.get(
         `${baseUrl}/guests?page=${page}&pageSize=${pageSize}&search=${param}`
       );
-      response.data.guests.length
+      response?.data?.guests?.length
         ? setData(response.data.guests)
         : setPage((prev) => --prev);
     } catch (error) {
