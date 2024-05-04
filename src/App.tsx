@@ -43,7 +43,7 @@ function App() {
       if (response.data.affected > 0) {
         setData((prev) => {
           prev[index].isChecked = payload;
-          return prev;
+          return [...prev];
         });
       }
     } catch (error) {
@@ -83,6 +83,7 @@ function App() {
     if (token) setIsLoggedIn(true);
     console.log({ isLoggedIn });
   };
+
   //useEffects
   useEffect(() => {
     fetchData();
@@ -96,6 +97,10 @@ function App() {
   useEffect(() => {
     debounceSearch();
   }, [query]);
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
 
   if (isLoading) {
     return <div>LOADING...</div>;
@@ -136,12 +141,12 @@ function App() {
         <input
           type="button"
           value="back"
-          onClick={() => setPage((prev) => prev++)}
+          onClick={() => setPage((prev) => --prev)}
         />
         <input
           type="button"
           value="next"
-          onClick={() => setPage((prev) => prev--)}
+          onClick={() => setPage((prev) => ++prev)}
         />
       </div>
       <div id="addGuest">
