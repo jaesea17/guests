@@ -25,7 +25,9 @@ function App() {
       const response = await axios.get(
         `${baseUrl}/guests?page=${page}&pageSize=${pageSize}&search=${param}`
       );
-      response.data.guests.length && setData(response.data.guests);
+      response.data.guests.length
+        ? setData(response.data.guests)
+        : setPage((prev) => --prev);
     } catch (error) {
       setMessage(error.message);
       setError(error.message);
@@ -101,10 +103,6 @@ function App() {
   useEffect(() => {
     fetchData();
   }, [page]);
-
-  useEffect(() => {
-    console.log("ran in data");
-  }, [data]);
 
   if (isLoading) {
     return <div>LOADING...</div>;
