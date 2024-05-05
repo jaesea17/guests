@@ -37,16 +37,31 @@ function App() {
   };
 
   const check = async (id: string, payload: boolean) => {
-    const index = data.findIndex((obj: Record<string, any>) => obj.id === id);
+    let index: unknown | number;
     try {
-      const response = await axios.patch(`${baseUrl}/guests/${id}`, {
+      const indexPromise = new Promise((resolve, reject) => {
+        const index = data.findIndex(
+          (obj: Record<string, any>) => obj.id === id
+        );
+        resolve(index);
+      });
+      const responsePromise = axios.patch(`${baseUrl}/guests/${id}`, {
         payload,
       });
-      if (response.data.affected > 0) {
-        setData((prev) => {
-          prev[index].isChecked = payload;
-          return [...prev];
-        });
+      const [indexRes, response] = await Promise.allSettled([
+        indexPromise,
+        responsePromise,
+      ]);
+      if (indexRes.status == "fulfilled") {
+        index = indexRes.value;
+      }
+      if (response.status == "fulfilled") {
+        if (response.value.data.affected > 0) {
+          setData((prev) => {
+            prev[index as number].isChecked = payload;
+            return [...prev];
+          });
+        }
       }
     } catch (error) {
       setMessage(error.message);
@@ -83,7 +98,6 @@ function App() {
   const verifyLogin = () => {
     const token = localStorage.getItem("token");
     if (token) setIsLoggedIn(true);
-    console.log({ isLoggedIn });
   };
 
   //useEffects
